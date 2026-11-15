@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="referrer" content="no-referrer" />
+    <title>Ingresando | Salón</title>
+  </head>
+  <body>
+    <main>
+      <h1>Ingreso con Google</h1>
+      <p id="status" role="status" aria-live="polite">Completando el acceso…</p>
+      <a href="/">Volver al inicio</a>
+      <noscript>Activá JavaScript y volvé a iniciar sesión desde el inicio.</noscript>
+    </main>
+  </body>
+</html>
+
+<script>
+  import { getSupabase } from '../../../lib/supabase';
+
+  async function completeSignIn() {
+    const status = document.querySelector<HTMLElement>('#status')!;
+    const params = new URLSearchParams(window.location.search);
+    const fragment = new URLSearchParams(window.location.hash.slice(1));
+    const code = params.get('code');
+    const failed = params.has('error') || fragment.has('error');
+    // Retirar el código de la URL incluso cuando el intercambio falla.
+    window.history.replaceState({}, document.title, window.location.pathname);
+    if (failed) {
+      status.textContent = 'El acceso no se completó. Volvé al inicio para intentarlo nuevamente.';
+      return;
+    }
+    if (!code) {
+      status.textContent = 'Este enlace no contiene un código de acceso. Ingresá desde el botón de Google.';
+      return;
+    }
+    try {
+      const { data, error } = await getSupabase().auth.exchangeCodeForSession(code);
+      if (error || !data.session) throw new Error('No se obtuvo una sesión.');
+      status.textContent = 'Sesión iniciada. Volviendo al inicio…';
+      window.location.replace('/');
+    } catch {
+      status.textContent = 'No se pudo completar el acceso. Volvé al inicio e intentá nuevamente en el mismo navegador.';
+    }
+  }
+  void completeSignIn();
+</script>
