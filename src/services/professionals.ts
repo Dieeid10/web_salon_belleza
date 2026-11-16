@@ -3,6 +3,6 @@ import { urls } from '@services/urls'
 import type { Professional } from '@/types'
 
 export const professionalsService = {
-    getServices: () => api.get<Professional[]>(urls.professionals.getProfessionals),
-    getServiceById: (serviceId: number) => api.get<Professional>(urls.professionals.getProfessionalById(serviceId))
+    getProfessionals: () => api.get<Professional[]>(urls.professionals.getProfessionals),
+    getProfessionalsById: (serviceId: number) => api.get<Professional>(urls.professionals.getProfessionalById(serviceId))
 }

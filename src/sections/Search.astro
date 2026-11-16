@@ -1,27 +1,27 @@
 ---
-import { servicesService } from "@services/services";
-import type { Service } from "@/types";
+import { servicesService } from "@services/services"
+import BookingDialog from "@/components/BookingDialog"
+import type { Service } from "@/types"
 
 const formatPrice = new Intl.NumberFormat("es-AR", {
     style: "currency",
     currency: "ARS",
     minimumFractionDigits: 0,
-    maximumFractionDigits: 2,
-});
+    maximumFractionDigits: 2
+})
 
-let services: Service[] = [];
-let loadError = false;
+let services: Service[] = []
+let loadError = false
 
 try {
-    const { success, data } = await servicesService.getServices();
-
+    const { success, data } = await servicesService.getServices()
     if (success) {
-        services = data ?? [];
+        services = data ?? []
     } else {
-        loadError = true;
+        loadError = true
     }
 } catch {
-    loadError = true;
+    loadError = true
 }
 ---
 
@@ -88,3 +88,4 @@ try {
         ))}
     </div>
 </section>
+<BookingDialog client:load services={services} />
