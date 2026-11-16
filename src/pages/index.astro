@@ -1,12 +1,14 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import GoogleLogin from '../components/GoogleLogin.astro';
+import Layout from '@layouts/Layout.astro'
+import Header from '@sections/Header.astro'
+import Search from '@sections/Search.astro'
+import Welcome from '@sections/Welcome.astro'
 ---
 
 <Layout>
-    <main>
-      <h1>Salón de belleza</h1>
-      <p>Bienvenida. Ingresá con Google para comenzar.</p>
-      <GoogleLogin />
+    <Header />
+    <main id="contenido">
+        <Welcome />
+        <Search />
     </main>
 </Layout>

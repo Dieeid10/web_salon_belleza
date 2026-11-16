@@ -3,10 +3,15 @@ import { defineConfig, envField } from 'astro/config';
 
 import tailwindcss from '@tailwindcss/vite';
 
+import react from "@astrojs/react";
+
 // https://astro.build/config
 export default defineConfig({
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    optimizeDeps: {
+      include: ["react", "react-dom/client"],
+    },
   },
   env: {
     schema: {
@@ -26,4 +31,6 @@ export default defineConfig({
       }),
     },
   },
+
+  integrations: [react()],
 });

@@ -1,0 +1,16 @@
+---
+import Menu from '@components/Menu.astro'
+---
+
+<header class="border-b border-aura-line">
+    <div class="mx-auto w-[calc(100%-2rem)] sm:w-[calc(100%-3.25rem)] lg:w-[calc(100%-6.5rem)] max-w-[1312px] grid min-h-[68px] grid-cols-[1fr_auto] items-center gap-3 sm:min-h-[88px] sm:grid-cols-[1fr_auto_1fr] sm:gap-6">
+      <a class="inline-flex w-max flex-col font-display text-[41px] leading-[.72] tracking-[-.04em] text-aura-plum sm:text-[49px] [&_span]:mt-2 [&_span]:font-body [&_span]:text-[8px] [&_span]:leading-normal [&_span]:font-bold [&_span]:tracking-[.22em]" href="/" aria-label="Aura, inicio">aura<span>ESTUDIO DE BELLEZA</span></a>
+      <nav class="hidden items-center gap-9 text-sm font-semibold sm:flex [&_a:hover]:text-aura-rose" aria-label="Principal">
+        <a href="#servicios">Servicios</a>
+        <a href="#promociones">Promociones</a>
+      </nav>
+      <div class="relative flex justify-end">
+        <Menu />
+      </div>
+    </div>
+  </header>

@@ -1,1 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
 @import "tailwindcss";
+
+@theme {
+  --color-aura-paper: #faf6f0;
+  --color-aura-white: #fffdf9;
+  --color-aura-ink: #372731;
+  --color-aura-plum: #532b3a;
+  --color-aura-plum-hover: #713c50;
+  --color-aura-rose: #9a4f62;
+  --color-aura-muted: #65525a;
+  --color-aura-line: #e0d3cc;
+  --color-aura-blush: #f0e4e2;
+  --color-aura-petal: #f3bdc4;
+  --font-display: "Instrument Serif", Georgia, serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
+}
+
+@layer base {   
+  html { @apply motion-safe:scroll-smooth; }
+  body { @apply bg-aura-paper font-body text-aura-ink; }
+  button:not(:disabled), select { @apply cursor-pointer; }
+  :focus-visible { @apply outline-2 outline-offset-4 outline-aura-rose; }
+  [hidden] { display: none !important; }
+}

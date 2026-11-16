@@ -1,13 +1,20 @@
-import axios, { type AxiosRequestConfig } from "axios";
-import { EnvConfig } from '../config/config'
+import axios, { type AxiosRequestConfig } from "axios"
+import { EnvConfig } from '@config/config'
 
 export interface ApiResponse<T = unknown> {
   success: boolean
   message: string
   data?: T
+  code?: string | null
 }
 
 const env = EnvConfig()
+
+export class SalonError extends Error {
+  constructor(message: string, readonly status: number, readonly code?: string) {
+    super(message);
+  }
+}
 
 export const client = axios.create({
   baseURL: env.api_url,
@@ -30,13 +37,17 @@ client.interceptors.request.use((config) => {
 
 client.interceptors.response.use(
   (response) => response.data,
-  (error) => {
-    const message = error.response?.data?.message ?? 'Error inesperado'
+  (error: unknown) => {
+    if (axios.isCancel(error) || !axios.isAxiosError<ApiResponse>(error)) {
+      return Promise.reject(error)
+    }
 
-    return Promise.reject({
-      success: false,
-      message,
-    } satisfies ApiResponse)
+    const response = error.response
+    return Promise.reject(new SalonError(
+      response?.data?.message ?? 'No pudimos completar la solicitud. Intentá de nuevo.',
+      response?.status ?? 0,
+      response?.data?.code ?? undefined
+    ))
   }
 )
 

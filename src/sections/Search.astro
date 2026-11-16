@@ -1,0 +1,90 @@
+---
+import { servicesService } from "@services/services";
+import type { Service } from "@/types";
+
+const formatPrice = new Intl.NumberFormat("es-AR", {
+    style: "currency",
+    currency: "ARS",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+});
+
+let services: Service[] = [];
+let loadError = false;
+
+try {
+    const { success, data } = await servicesService.getServices();
+
+    if (success) {
+        services = data ?? [];
+    } else {
+        loadError = true;
+    }
+} catch {
+    loadError = true;
+}
+---
+
+<section
+    id="servicios"
+    aria-labelledby="services-title"
+    class="mx-auto w-[calc(100%-2rem)] max-w-[1312px] scroll-mt-5 border-t border-aura-line py-10"
+>
+    <div>   
+        <p class="text-[11px] leading-normal font-bold tracking-[.19em] text-aura-rose uppercase">
+            La carta de Aura
+        </p>
+        <h2
+            id="services-title"
+            class="font-display font-normal tracking-tight text-aura-plum mt-2 text-[clamp(43px,5.3vw,75px)] leading-none"
+        >
+            Encontrá tu servicio.
+        </h2>
+    </div>
+
+    {loadError && (
+        <p class="text-sm text-aura-muted">No pudimos cargar los servicios.</p>
+    )}
+
+    {!loadError && services.length === 0 && (
+        <p class="text-sm text-aura-muted">
+            Por el momento no hay servicios disponibles.
+        </p>
+    )}
+
+    <div id="catalog" class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {services.map((service) => (
+            <article class="flex min-w-0 flex-col rounded-md border border-aura-line bg-aura-white p-5">
+                <p class="mb-2 text-xs font-semibold text-aura-muted">
+                    {service.duration_minutes} min
+                </p>
+
+                <h3 class="mb-2 font-display text-3xl leading-none text-aura-plum">
+                    {service.name}
+                </h3>
+
+                {service.description && (
+                    <p class="mb-4 text-sm text-aura-muted">
+                        {service.description}
+                    </p>
+                )}
+
+                <div class="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-aura-line pt-3">
+                    <p class="text-lg tabular-nums text-aura-plum">
+                        {service.duration_minutes} min   - {formatPrice.format(Number(service.price))}
+                    </p>
+
+                    <button
+                        type="button"
+                        data-book
+                        data-service-id={service.id}
+                        aria-label={`Reservar ${service.name}`}
+                        class="min-h-11 rounded-md px-4 py-2 text-sm font-bold text-aura-plum hover:underline"
+                    >
+                        Reservar
+                    </button>
+                </div>
+            </article>
+        ))}
+    </div>
+</section>
